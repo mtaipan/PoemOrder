@@ -1,0 +1,29 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layouts/public :: layout(~{::content})">
+
+<div th:fragment="content" class="stack">
+
+    <p class="muted" style="margin:0;">
+        <a th:href="@{/portfolio}">← Назад в портфолио</a>
+    </p>
+
+    <header class="stack" style="gap:6px;">
+        <h1 th:text="${item.title}">Название</h1>
+        <p class="muted" style="margin:0;"
+           th:text="${'Стих · ' + (item.status != null ? item.status : '')}">
+            Стих · PUBLISHED
+        </p>
+    </header>
+
+    <div class="card">
+        <div class="poem-text" th:text="${item.body}">Текст…</div>
+    </div>
+
+    <div style="text-align:center; margin-top:6px;">
+        <a class="btn" th:href="@{/order}">Заказать стих</a>
+        <p class="small" style="margin:8px 0 0;">Опиши идею — я уточню детали</p>
+    </div>
+
+</div>
+</html>

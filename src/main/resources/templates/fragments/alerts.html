@@ -1,0 +1,9 @@
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="alerts">
+    <div th:if="${flashSuccess}" class="alert alert-success" role="status">
+        <p th:text="${flashSuccess}" style="margin:0;">Успешно.</p>
+    </div>
+
+    <div th:if="${flashError}" class="alert alert-error" role="alert">
+        <p th:text="${flashError}" style="margin:0;">Ошибка.</p>
+    </div>
+</div>

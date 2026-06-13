@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/admin :: layout(~{::content}, 'orders')}">
+
+<div th:fragment="content" class="stack">
+
+    <div class="page-head">
+        <div>
+            <h1>Заказ #<span th:text="${order.id}">1</span></h1>
+            <p class="subtitle" th:text="${#temporals.format(order.createdAt, 'dd.MM.yyyy HH:mm')}">—</p>
+        </div>
+        <div class="toolbar">
+            <a class="btn btn-sm" th:href="@{/admin/orders}">← К списку</a>
+        </div>
+    </div>
+
+    <div th:if="${ok}" class="alert ok" th:text="${ok}">Сохранено.</div>
+
+    <div class="card">
+        <dl class="dl">
+            <dt>Имя</dt>      <dd th:text="${order.name}">—</dd>
+            <dt>Телефон</dt>  <dd th:text="${order.phone}">—</dd>
+            <dt>Соцсеть</dt>  <dd th:text="${order.social != null ? order.social : '—'}">—</dd>
+            <dt>Статус</dt>
+            <dd>
+                <span class="badge" th:classappend="${'b-' + #strings.toLowerCase(order.status)}"
+                      th:text="${order.status}">NEW</span>
+            </dd>
+        </dl>
+    </div>
+
+    <div class="card stack" style="gap:12px">
+        <h2 style="font-size:15px;margin:0">Описание заказа</h2>
+        <p class="pre" th:text="${order.description}">Текст…</p>
+    </div>
+
+    <div class="card stack" style="gap:12px">
+        <h2 style="font-size:15px;margin:0">Изменить статус</h2>
+        <form th:action="@{'/admin/orders/' + ${order.id} + '/status'}" method="post"
+              class="toolbar" style="align-items:end">
+            <div class="field" style="min-width:220px">
+                <label for="status">Статус</label>
+                <select id="status" name="status">
+                    <option th:each="s : ${statuses}"
+                            th:value="${s}" th:text="${s}"
+                            th:selected="${s == order.status}">NEW</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" type="submit">Сохранить</button>
+        </form>
+    </div>
+
+</div>
+</html>

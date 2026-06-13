@@ -1,0 +1,42 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru"
+      th:replace="~{layouts/admin :: layout(~{::content}, 'dashboard')}">
+
+<div th:fragment="content" class="stack">
+
+    <div class="page-head">
+        <div>
+            <h1>Обзор</h1>
+            <p class="subtitle">Управление контентом и заявками сайта.</p>
+        </div>
+    </div>
+
+    <div class="cards">
+        <a class="tile" th:href="@{/admin/orders}">
+            <div class="t">📥 Заказы</div>
+            <div class="d">Заявки с сайта и их статусы</div>
+        </a>
+        <a class="tile" th:href="@{/admin/reviews}">
+            <div class="t">💬 Отзывы</div>
+            <div class="d">Модерация и публикация</div>
+        </a>
+        <a class="tile" th:href="@{/admin/poems}">
+            <div class="t">✍️ Стихи</div>
+            <div class="d">Портфолио опубликованных работ</div>
+        </a>
+        <a class="tile" th:href="@{/admin/contacts}">
+            <div class="t">🔗 Контакты</div>
+            <div class="d">Карточки на странице контактов</div>
+        </a>
+        <a class="tile" th:href="@{/admin/settings}">
+            <div class="t">⚙️ Настройки</div>
+            <div class="d">Тексты главной, цен, портфолио</div>
+        </a>
+        <a class="tile" th:href="@{/}" target="_blank" rel="noopener">
+            <div class="t">🌐 Сайт ↗</div>
+            <div class="d">Открыть публичную часть</div>
+        </a>
+    </div>
+
+</div>
+</html>

@@ -1,0 +1,44 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: poems_db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-poems}
+      POSTGRES_USER: ${POSTGRES_USER:-poems}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-poems}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-poems} -d ${POSTGRES_DB:-poems}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: poems_app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-poems}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-poems}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-poems}
+
+      SERVER_PORT: 8081
+
+      # Секреты только из .env, не хардкодим в compose
+      APP_ADMINS: ${APP_ADMINS:?Set APP_ADMINS in .env (format user:pass,user2:pass2)}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID:-}
+
+      THYMELEAF_CACHE: ${THYMELEAF_CACHE:-true}
+
+    ports:
+      - "127.0.0.1:8081:8081"
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:

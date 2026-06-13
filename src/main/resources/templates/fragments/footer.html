@@ -1,0 +1,8 @@
+<th:block xmlns:th="http://www.thymeleaf.org" th:fragment="footer">
+    <div class="footer">
+        <p class="small" style="margin:0;">
+            © <span th:text="${#dates.format(#dates.createNow(),'yyyy')}">2026</span>
+            <span th:text="${siteName ?: 'Стихи на заказ'}">Стихи на заказ</span>
+        </p>
+    </div>
+</th:block>

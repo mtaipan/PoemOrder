@@ -1,0 +1,73 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru"
+      th:replace="~{layouts/admin :: layout(~{::content}, 'settings')}">
+
+<div th:fragment="content" class="stack">
+
+    <div class="page-head">
+        <div>
+            <h1>Настройки сайта</h1>
+            <p class="subtitle">Тексты публичных страниц.</p>
+        </div>
+    </div>
+
+    <div th:if="${param.ok}" class="alert ok">Сохранено.</div>
+
+    <form th:action="@{/admin/settings}" method="post" th:object="${settings}" class="stack">
+
+        <div class="card stack">
+            <h2 style="font-size:15px;margin:0">Главная</h2>
+            <div class="field">
+                <label>Заголовок</label>
+                <input type="text" th:field="*{heroTitle}" maxlength="120" required/>
+            </div>
+            <div class="field">
+                <label>Подзаголовок</label>
+                <textarea th:field="*{heroSubtitle}" maxlength="500" rows="3" required></textarea>
+            </div>
+        </div>
+
+        <div class="card stack">
+            <h2 style="font-size:15px;margin:0">Портфолио</h2>
+            <div class="field">
+                <label>Заголовок</label>
+                <input type="text" th:field="*{portfolioTitle}" maxlength="120" placeholder="Портфолио"/>
+            </div>
+            <div class="field">
+                <label>Описание</label>
+                <textarea th:field="*{portfolioSubtitle}" rows="4"
+                          placeholder="Можно в несколько строк — переносы сохранятся."></textarea>
+            </div>
+        </div>
+
+        <div class="card stack">
+            <h2 style="font-size:15px;margin:0">Цены и условия</h2>
+            <div class="field">
+                <label>Заголовок страницы</label>
+                <input type="text" th:field="*{pricingTitle}" maxlength="160"
+                       placeholder="Условия оплаты, доставки и возврата"/>
+            </div>
+            <div class="grid2">
+                <div class="field">
+                    <label>Оплата</label>
+                    <textarea th:field="*{pricingPayment}" rows="4"></textarea>
+                </div>
+                <div class="field">
+                    <label>Доставка</label>
+                    <textarea th:field="*{pricingDelivery}" rows="4"></textarea>
+                </div>
+            </div>
+            <div class="field">
+                <label>Возврат</label>
+                <textarea th:field="*{pricingRefund}" rows="4"></textarea>
+            </div>
+        </div>
+
+        <div class="toolbar">
+            <button class="btn btn-primary" type="submit">Сохранить</button>
+            <a class="btn" th:href="@{/admin/contacts}">Управление контактами →</a>
+        </div>
+    </form>
+
+</div>
+</html>

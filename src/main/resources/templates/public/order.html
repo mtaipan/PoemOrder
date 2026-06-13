@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/public :: layout(~{::content})}">
+
+<div th:fragment="content">
+
+    <h1>Заказать стих</h1>
+    <p class="small">
+        Заполни форму — я свяжусь, уточню детали и сроки. Можно писать как удобно, без идеального ТЗ.
+    </p>
+
+    <form class="stack" th:action="@{/order}" th:object="${orderForm}" method="post">
+
+        <!-- CSRF -->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <!-- Honeypot -->
+        <div style="position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden;" aria-hidden="true">
+            <label for="website">Website</label>
+            <input id="website" type="text" th:field="*{website}" tabindex="-1" autocomplete="off">
+        </div>
+
+        <div class="field">
+            <label for="name">Имя</label>
+            <input id="name" type="text" th:field="*{name}" autocomplete="name" required>
+            <div th:replace="~{fragments/form-errors :: fieldErrors('name')}"></div>
+        </div>
+
+        <div class="field">
+            <label for="phone">Телефон</label>
+            <input id="phone" type="tel" th:field="*{phone}" autocomplete="tel" required>
+            <div th:replace="~{fragments/form-errors :: fieldErrors('phone')}"></div>
+        </div>
+
+        <div class="field">
+            <label for="social">Контакт (Telegram / VK / другое)</label>
+            <input id="social" type="text" th:field="*{social}" autocomplete="off">
+            <div th:replace="~{fragments/form-errors :: fieldErrors('social')}"></div>
+        </div>
+
+        <div class="field">
+            <label for="description">Пожелания / история / стиль</label>
+            <textarea id="description" rows="7" th:field="*{description}" required></textarea>
+            <div th:replace="~{fragments/form-errors :: fieldErrors('description')}"></div>
+        </div>
+
+        <button class="btn" type="submit">Отправить заявку</button>
+
+        <p class="small muted" style="margin:0;">
+            Нажимая «Отправить», ты соглашаешься на обработку данных для связи по заказу.
+        </p>
+
+    </form>
+
+</div>
+</html>

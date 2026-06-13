@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layouts/public :: layout(~{::content})">
+<body>
+<section th:fragment="content" class="wrap stack">
+    <h1>Страница не найдена</h1>
+
+    <p class="lead">
+        Возможно, ссылка устарела или была введена с ошибкой.
+    </p>
+
+    <div class="actions">
+        <a th:href="@{/}" class="btn">На главную</a>
+        <a th:href="@{/order}">Заказать стих</a>
+    </div>
+</section>
+</body>
+</html>

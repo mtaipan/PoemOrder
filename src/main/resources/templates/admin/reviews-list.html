@@ -1,0 +1,84 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru"
+      th:replace="~{layouts/admin :: layout(~{::content}, 'reviews')}">
+
+<div th:fragment="content" class="stack">
+
+    <div class="page-head">
+        <div>
+            <h1>Отзывы</h1>
+            <p class="subtitle">Новые отзывы публикуются только после вашего одобрения.</p>
+        </div>
+    </div>
+
+    <div th:if="${okMessage}" class="alert ok" th:text="${okMessage}">Готово.</div>
+
+    <!-- ===== На модерации ===== -->
+    <section class="stack" style="gap:12px">
+        <h2 style="font-size:16px">
+            На модерации
+            <span class="badge b-pending" th:if="${pending != null && !pending.isEmpty()}"
+                  th:text="${pending.size()}">0</span>
+        </h2>
+
+        <div th:if="${pending == null || pending.isEmpty()}" class="empty">
+            <div class="big">Очередь пуста</div>
+            <div>Новые отзывы с сайта появятся здесь.</div>
+        </div>
+
+        <div class="card stack" th:each="r : ${pending}" style="gap:10px">
+            <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center">
+                <strong th:text="${r.name}">Имя</strong>
+                <span class="small" th:if="${r.telegramUsername != null}"
+                      th:text="'@' + ${r.telegramUsername}">@user</span>
+            </div>
+            <p class="pre" th:text="${r.text}">Текст отзыва</p>
+            <div class="toolbar">
+                <form th:action="@{'/admin/reviews/' + ${r.id} + '/approve'}" method="post" style="margin:0">
+                    <button class="btn btn-primary btn-sm" type="submit">Принять</button>
+                </form>
+                <form th:action="@{'/admin/reviews/' + ${r.id} + '/delete'}" method="post" style="margin:0"
+                      onsubmit="return confirm('Удалить отзыв?')">
+                    <button class="btn btn-danger btn-sm" type="submit">Удалить</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <hr class="sep">
+
+    <!-- ===== Опубликованные ===== -->
+    <section class="stack" style="gap:12px">
+        <h2 style="font-size:16px">Опубликованные</h2>
+
+        <div th:if="${approved == null || approved.empty}" class="empty">
+            <div>Опубликованных отзывов пока нет.</div>
+        </div>
+
+        <div class="card stack" th:each="r : ${approved}" style="gap:10px">
+            <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center">
+                <span>
+                    <strong th:text="${r.name}">Имя</strong>
+                    <span class="small" th:if="${r.telegramPublic and r.telegramUsername != null}"
+                          th:text="'· @' + ${r.telegramUsername}">· @user</span>
+                </span>
+                <span class="badge b-approved">опубликован</span>
+            </div>
+            <p class="pre" th:text="${r.text}">Текст отзыва</p>
+            <div class="toolbar">
+                <form th:if="${r.telegramUsername != null}"
+                      th:action="@{'/admin/reviews/' + ${r.id} + '/hide-contact'}" method="post" style="margin:0">
+                    <button class="btn btn-sm" type="submit">Скрыть контакт</button>
+                </form>
+                <form th:action="@{'/admin/reviews/' + ${r.id} + '/delete'}" method="post" style="margin:0"
+                      onsubmit="return confirm('Удалить отзыв?')">
+                    <button class="btn btn-danger btn-sm" type="submit">Удалить</button>
+                </form>
+            </div>
+        </div>
+
+        <nav th:replace="~{fragments/pager :: pager(${approved}, '/admin/reviews')}"></nav>
+    </section>
+
+</div>
+</html>

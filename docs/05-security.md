@@ -1,0 +1,88 @@
+# Безопасность
+
+Вся конфигурация — в `config/SecurityConfig.java`. Здесь описано, что включено, как работает и почему именно так.
+
+## Аутентификация
+
+- **Form login** Spring Security: страница `/admin/login` (шаблон `admin/login.html`), POST туда же обрабатывает Security, успех → `/admin/dashboard`, ошибка → `/admin/login?error=1`.
+- **Пользователи** — in-memory, из переменной `APP_ADMINS` формата `user:pass,user2:pass2`. Парсятся при старте; пустая/битая переменная = отказ стартовать (защита от деплоя «админки без админов» или с дефолтным паролем из примера).
+- **Пароли** хэшируются **Argon2** (`Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8`, требует Bouncy Castle — он в зависимостях) сразу при старте; в памяти процесса исходные строки пароля не задерживаются дольше инициализации.
+- Все админы получают одну роль — `ADMIN`.
+
+Ограничение модели: смена пароля = изменение env + рестарт. Для одного-двух админов это осознанный выбор в пользу простоты (нет таблицы пользователей, нет flow восстановления пароля — нечего ломать).
+
+## Авторизация
+
+Принцип — **explicit allow-list, запрет по умолчанию**:
+
+```
+/css/**, /js/**, /img/**, /favicon.ico      → permitAll (статика)
+/, /order, /reviews, /contacts,
+/portfolio, /portfolio/*, /pricing           → permitAll (страницы)
+POST /order, POST /reviews                   → permitAll (формы)
+/error, /actuator/health, /actuator/info     → permitAll (служебные)
+/admin/login, /admin/logout                  → permitAll
+/admin/**                                    → hasRole("ADMIN")
+всё остальное                                → denyAll
+```
+
+Следствие: **новый публичный маршрут не заработает, пока не добавлен в список** — анонима редиректит на логин-страницу. Это намеренно: забытый эндпоинт закрыт, а не открыт. При добавлении страницы не забудь `SecurityConfig`.
+
+Actuator: наружу только `health` и `info` (`management.endpoints.web.exposure.include`), детали health скрыты (`show-details=never`).
+
+## CSRF
+
+Включён для всех изменяющих запросов (дефолт Spring Security, в проекте не отключался). Thymeleaf автоматически вставляет скрытое поле `_csrf` в каждую форму с `th:action` (через `CsrfRequestDataValueProcessor`); в части шаблонов поле прописано явно — это дублирование безвредно.
+
+POST без валидного токена → `403`. Токен привязан к сессии (`JSESSIONID` выдаётся и анонимам при рендере формы).
+
+## Сессии
+
+- **Session fixation protection**: `migrateSession` — после логина ID сессии меняется.
+- **Лимит одновременных сессий**: 10 на пользователя (чтобы несколько устройств/админов не выбивали друг друга).
+- **`HttpSessionEventPublisher`** зарегистрирован — без него реестр сессий не узнаёт о logout/истечении и лимит работает неверно.
+- Logout: `POST /admin/logout` (CSRF-защищён), инвалидация сессии, удаление `JSESSIONID`, редирект на `/admin/login?logout=1`.
+
+## Заголовки ответа
+
+| Заголовок | Значение | Зачем |
+|---|---|---|
+| `X-Frame-Options` | `DENY` | запрет встраивания в iframe (clickjacking) |
+| `X-Content-Type-Options` | `nosniff` | запрет MIME-sniffing |
+| `Cache-Control` | отключён кэш | ответы (включая админку) не оседают в кэшах браузера/прокси |
+
+TLS/HSTS — зона ответственности reverse proxy (см. [10-deployment.md](10-deployment.md)).
+
+## Защита от XSS
+
+- **Правило проекта: только `th:text`** (экранирование). `th:utext` не используется нигде; многострочные тексты (блоки цен) рендерятся поабзацно через `arraySplit` + `th:text`.
+- **`href` контактных карточек** — единственное место, где админский ввод попадает в атрибут ссылки. `ContactLinkService` принимает только схемы `http://`, `https://`, `mailto:`, `tel:`; попытка сохранить `javascript:...` отклоняется (админка показывает сообщение об ошибке). Проверено интеграционно.
+- При код-ревью нового шаблона первый вопрос: «нет ли тут `th:utext` и не попадает ли пользовательский ввод в атрибуты?».
+
+## Защита от mass assignment
+
+- Публичные формы биндятся в DTO (`OrderForm`, `ReviewForm`) — лишние поля запроса просто не имеют куда сесть.
+- В админке, где формы биндятся в сущности, системные поля затираются сервисом: `PoemService.create` обнуляет `id` и `createdAt`; `SiteSettingsService.update` копирует только редактируемые поля на загруженную из БД сущность.
+
+## Ошибки
+
+- `server.error.include-stacktrace/message/binding-errors = never` — наружу не утекают детали исключений.
+- Свои страницы `error/403.html`, `error/404.html`, `error/500.html`.
+
+## Антиспам
+
+Rate limiting и honeypot — отдельный документ: [08-antispam.md](08-antispam.md).
+
+## Чек-лист для прода
+
+- [ ] `APP_ADMINS` с сильными паролями, не из примеров.
+- [ ] `POSTGRES_PASSWORD` не `poems`.
+- [ ] `.env` не в git (есть в `.gitignore`), права на файл — только владелец.
+- [ ] Приложение слушает `127.0.0.1`, наружу — только через reverse proxy с TLS.
+- [ ] Proxy передаёт `X-Forwarded-For` / `X-Forwarded-Proto` (нужно и rate limiter'у, и генерации ссылок).
+
+## Известные ограничения
+
+- Нет 2FA и audit log — не оправдано масштабом.
+- Нет блокировки по числу неудачных логинов (Argon2 сам по себе делает перебор дорогим; при желании добавить — см. `AuthenticationFailureListener` в Spring Security).
+- Rate limiter доверяет `X-Forwarded-For` — корректно только за доверенным proxy (см. [08-antispam.md](08-antispam.md)).

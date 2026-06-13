@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ru"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/public :: layout(~{::content})}">
+
+<main th:fragment="content" class="stack">
+
+    <h1 th:text="${(settings != null and settings.pricingTitle != null and !#strings.isEmpty(settings.pricingTitle))
+                  ? settings.pricingTitle
+                  : 'Условия оплаты, доставки и возврата'}">
+        Условия оплаты, доставки и возврата
+    </h1>
+
+    <p class="muted" style="margin:0;">
+        Если есть вопросы — напиши, всё уточню.
+    </p>
+
+    <div class="grid">
+    <section class="card">
+            <h3 style="margin:0 0 8px;">Оплата</h3>
+            <p class="small muted" th:if="${settings == null or settings.pricingPayment == null}">
+                Текст скоро появится.
+            </p>
+            <p th:if="${settings != null and settings.pricingPayment != null}"
+               th:each="line : ${#strings.arraySplit(settings.pricingPayment, '\n')}"
+               th:text="${line}"
+               style="margin:0;"></p>
+        </section>
+
+        <section class="card">
+            <h3 style="margin:0 0 8px;">Доставка</h3>
+            <p class="small muted" th:if="${settings == null or settings.pricingDelivery == null}">
+                Текст скоро появится.
+            </p>
+            <p th:if="${settings != null and settings.pricingDelivery != null}"
+               th:each="line : ${#strings.arraySplit(settings.pricingDelivery, '\n')}"
+               th:text="${line}"
+               style="margin:0;"></p>
+        </section>
+
+        <section class="card">
+            <h3 style="margin:0 0 8px;">Возврат</h3>
+            <p class="small muted" th:if="${settings == null or settings.pricingRefund == null}">
+                Текст скоро появится.
+            </p>
+            <p th:if="${settings != null and settings.pricingRefund != null}"
+               th:each="line : ${#strings.arraySplit(settings.pricingRefund, '\n')}"
+               th:text="${line}"
+               style="margin:0;"></p>
+        </section>
+    </div>
+
+    <p style="margin-top:6px;">
+        <a th:href="@{/order}">Перейти к заказу →</a>
+    </p>
+
+</main>
+</html>

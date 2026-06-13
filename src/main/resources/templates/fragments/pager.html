@@ -1,0 +1,21 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- Пагинатор для Spring Data Page: pager(page=Page<?>, baseUrl='/admin/orders') -->
+<nav th:fragment="pager(page, baseUrl)"
+     th:if="${page != null and page.totalPages > 1}" class="pager">
+
+    <a class="btn btn-sm" th:if="${page.hasPrevious()}"
+       th:href="@{${baseUrl}(page=${page.number - 1})}">← Назад</a>
+    <span th:unless="${page.hasPrevious()}"></span>
+
+    <span th:text="|${page.number + 1} из ${page.totalPages} · всего ${page.totalElements}|">1 из 1</span>
+
+    <a class="btn btn-sm" th:if="${page.hasNext()}"
+       th:href="@{${baseUrl}(page=${page.number + 1})}">Вперёд →</a>
+    <span th:unless="${page.hasNext()}"></span>
+</nav>
+
+</body>
+</html>

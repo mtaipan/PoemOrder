@@ -1,0 +1,39 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru" th:fragment="layout(content, active)">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <title th:text="${pageTitle} ?: 'Админка · PoemOrder'">Админка</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="bar">
+        <a class="brand" th:href="@{/admin/dashboard}">
+            <span class="dot">P</span><span>PoemOrder</span>
+        </a>
+        <nav class="nav">
+            <a th:href="@{/admin/dashboard}" th:classappend="${active=='dashboard'}?'active'">Обзор</a>
+            <a th:href="@{/admin/poems}"     th:classappend="${active=='poems'}?'active'">Стихи</a>
+            <a th:href="@{/admin/orders}"    th:classappend="${active=='orders'}?'active'">Заказы</a>
+            <a th:href="@{/admin/reviews}"   th:classappend="${active=='reviews'}?'active'">Отзывы</a>
+            <a th:href="@{/admin/contacts}"  th:classappend="${active=='contacts'}?'active'">Контакты</a>
+            <a th:href="@{/admin/settings}"  th:classappend="${active=='settings'}?'active'">Настройки</a>
+        </nav>
+        <div class="right">
+            <a class="small" th:href="@{/}" target="_blank" rel="noopener">На сайт ↗</a>
+            <form th:action="@{/admin/logout}" method="post" style="margin:0">
+                <button class="btn btn-sm" type="submit">Выйти</button>
+            </form>
+        </div>
+    </div>
+</header>
+
+<main class="wrap">
+    <div th:replace="${content}">Контент</div>
+</main>
+
+</body>
+</html>

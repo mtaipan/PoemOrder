@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+      th:fragment="layout(content)">
+
+<head th:replace="~{fragments/head :: head}">
+    <!-- fragments/head.html -->
+</head>
+
+<body>
+
+<!-- DEV OVERLAY: сайт в разработке (временно) -->
+<div id="devOverlay" class="dev-overlay" role="dialog" aria-modal="true" aria-labelledby="devTitle">
+    <div class="dev-card">
+        <div class="dev-badge">ВНИМАНИЕ</div>
+
+        <h2 id="devTitle" class="dev-title">САЙТ НАХОДИТСЯ В РАЗРАБОТКЕ</h2>
+
+        <p class="dev-text">ЗАКАЗЫ НЕ ПРИНИМАЮТСЯ</p>
+
+        <p class="dev-text">
+            ПО ВСЕМ ВОПРОСАМ ОБРАЩАТЬСЯ В ТЕЛЕГРАМ
+            <a class="dev-link" href="https://t.me/alex091984" target="_blank" rel="noopener">@alex091984</a>
+        </p>
+
+        <div class="dev-actions">
+            <button id="devCloseBtn" class="dev-close-btn" type="button" disabled>
+                Закрыть (5)
+            </button>
+        </div>
+
+        <p class="dev-note">Это тестовая версия для проверки. Не распространять.</p>
+    </div>
+</div>
+
+<style>
+    .dev-overlay{
+        position:fixed; inset:0;
+        z-index:9999;
+        display:flex; align-items:center; justify-content:center;
+        padding:18px;
+        background:rgba(0,0,0,.72);
+        backdrop-filter: blur(2px);
+    }
+    .dev-card{
+        width:min(680px, 100%);
+        background:#fff;
+        color:#111;
+        border:1px solid rgba(0,0,0,.08);
+        border-radius:14px;
+        padding:20px 18px 16px;
+        box-shadow:0 16px 50px rgba(0,0,0,.35);
+        font:16px/1.55 Georgia,"Times New Roman",serif;
+    }
+    .dev-badge{
+        display:inline-block;
+        font-size:12px;
+        letter-spacing:.08em;
+        border:1px solid #111;
+        padding:6px 10px;
+        border-radius:999px;
+    }
+    .dev-title{
+        margin:14px 0 10px;
+        font-size:28px;
+        line-height:1.15;
+        text-transform:uppercase;
+    }
+    .dev-text{ margin:0 0 10px; font-size:18px; }
+    .dev-link{
+        font-weight:700;
+        text-decoration-thickness:.12em;
+        text-underline-offset:.2em;
+    }
+    .dev-actions{
+        margin-top:16px;
+        display:flex;
+        justify-content:center;
+    }
+    .dev-close-btn{
+        width:100%;
+        padding:14px 16px;
+        border-radius:12px;
+        border:1px solid #111;
+        background:#111;
+        color:#fff;
+        font:inherit;
+        cursor:pointer;
+    }
+    .dev-close-btn:disabled{
+        opacity:.55;
+        cursor:not-allowed;
+    }
+    .dev-note{
+        margin:12px 0 0;
+        font-size:13px;
+        color:#555;
+        text-align:center;
+    }
+</style>
+
+<script>
+    (function () {
+        var overlay = document.getElementById("devOverlay");
+        var btn = document.getElementById("devCloseBtn");
+        if (!overlay || !btn) return;
+
+        // Если оверлей уже закрывали в этой вкладке — скрываем и выходим
+        if (sessionStorage.getItem("devOverlayClosed") === "1") {
+            overlay.style.display = "none";
+            return;
+        }
+
+        var seconds = 5;
+        btn.textContent = "Закрыть (" + seconds + ")";
+
+        var timer = setInterval(function () {
+            seconds -= 1;
+            if (seconds <= 0) {
+                clearInterval(timer);
+                btn.disabled = false;
+                btn.textContent = "Закрыть";
+                return;
+            }
+            btn.textContent = "Закрыть (" + seconds + ")";
+        }, 1000);
+
+        btn.addEventListener("click", function () {
+            overlay.style.display = "none";
+            sessionStorage.setItem("devOverlayClosed", "1");
+        });
+    })();
+</script>
+
+<!-- /DEV OVERLAY -->
+
+<header th:replace="~{fragments/header :: header}"></header>
+
+<main class="wrap">
+    <!-- Глобальные сообщения (успех/ошибка) -->
+    <div th:replace="~{fragments/alerts :: alerts}"></div>
+
+    <!-- Контент конкретной страницы -->
+    <div th:replace="${content}"></div>
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<!-- <script defer th:src="@{/js/app.js}"></script> -->
+</body>
+</html>

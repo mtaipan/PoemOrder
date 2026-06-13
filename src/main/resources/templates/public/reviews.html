@@ -1,0 +1,68 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/public :: layout(~{::content})}">
+
+<th:block th:fragment="content">
+
+    <h1>Отзывы</h1>
+    <p class="small" style="margin-bottom:0;">
+        Публикуются после модерации. Текст не редактируется.
+    </p>
+
+    <hr class="hr" />
+
+    <ul class="list">
+        <li class="item" th:if="${reviews == null || reviews.isEmpty()}">
+            <p style="margin:0;">Пока нет опубликованных отзывов.</p>
+        </li>
+
+        <li class="item" th:each="r : ${reviews}">
+            <p style="margin:0 0 6px;">
+                <strong th:text="${r.name}">Имя</strong>
+                <span class="small"
+                      th:if="${r.telegramPublic and r.telegramUsername != null}"
+                      th:text="${' · @' + r.telegramUsername}"> · @username</span>
+            </p>
+            <p style="margin:0;" th:text="${r.text}">Текст отзыва</p>
+        </li>
+    </ul>
+
+    <hr class="hr" />
+
+    <h2 style="margin:0 0 10px;">Оставить отзыв</h2>
+
+    <form th:action="@{/reviews}" method="post" th:object="${reviewForm}">
+
+        <!-- honeypot -->
+        <div class="hp">
+            <label>Не заполнять</label>
+            <input type="text" name="website" autocomplete="off" tabindex="-1" />
+        </div>
+
+        <label for="name">Имя *</label>
+        <input id="name" type="text" th:field="*{name}" maxlength="50" autocomplete="name" required />
+        <div th:replace="~{fragments/form-errors :: fieldErrors('name')}"></div>
+
+        <label for="text">Текст *</label>
+        <textarea id="text" th:field="*{text}" maxlength="2000" required></textarea>
+        <div th:replace="~{fragments/form-errors :: fieldErrors('text')}"></div>
+
+        <label for="telegramUsername">Telegram username (необязательно)</label>
+        <input id="telegramUsername" type="text" th:field="*{telegramUsername}"
+               maxlength="32" placeholder="username (без @)" autocomplete="off" />
+        <div th:replace="~{fragments/form-errors :: fieldErrors('telegramUsername')}"></div>
+
+        <label style="margin-top:12px;">
+            <input type="checkbox" th:field="*{telegramPublic}" />
+            <span class="small">Показать мой Telegram в отзыве (добровольно, повышает доверие)</span>
+        </label>
+
+        <div class="actions">
+            <button class="btn" type="submit">Отправить</button>
+            <span class="small">Отзыв появится после модерации.</span>
+        </div>
+
+    </form>
+
+</th:block>
+</html>

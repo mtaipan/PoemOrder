@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sed -n '1,80p' src/main/resources/templates/public/contacts.html)",
+      "Bash(sed -n '1,60p' src/main/resources/templates/public/portfolio.html)",
+      "Bash(./mvnw -q -DskipTests compile)",
+      "Bash(echo \"EXIT: $?\")",
+      "Bash(docker compose *)",
+      "Bash(nc -z localhost 5432)",
+      "Read(//Applications/**)",
+      "Bash(brew list *)",
+      "Bash(brew --version)",
+      "Bash(brew install *)"
+    ]
+  }
+}

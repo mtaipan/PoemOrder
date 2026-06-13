@@ -1,0 +1,58 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru"
+      th:replace="~{layouts/admin :: layout(~{::content}, 'poems')}">
+
+<div th:fragment="content" class="stack">
+
+    <div class="page-head">
+        <div>
+            <h1 th:text="${mode=='create' ? 'Новый стих' : 'Редактирование'}">Редактирование</h1>
+            <p class="subtitle">Опубликованные стихи появляются в портфолио на сайте.</p>
+        </div>
+        <div class="toolbar">
+            <a class="btn btn-sm" th:href="@{/admin/poems}">← К списку</a>
+        </div>
+    </div>
+
+    <div th:if="${param.ok}" class="alert ok">Сохранено.</div>
+
+    <form class="card stack"
+          th:action="${mode=='create'} ? @{/admin/poems/new} : @{|/admin/poems/${poem.id}/edit|}"
+          method="post" th:object="${poem}">
+
+        <input type="hidden" th:field="*{id}"/>
+
+        <div class="field">
+            <label for="title">Название *</label>
+            <input id="title" type="text" th:field="*{title}" maxlength="120" required/>
+            <div class="err" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+        </div>
+
+        <div class="field" style="max-width:280px">
+            <label for="status">Статус</label>
+            <select id="status" th:field="*{status}">
+                <option th:each="s : ${statuses}" th:value="${s}" th:text="${s.label}">Опубликовано</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label for="excerpt">Короткое описание</label>
+            <textarea id="excerpt" th:field="*{excerpt}" maxlength="400" rows="3"></textarea>
+            <span class="hint">Показывается в карточке портфолио. Если пусто — берётся начало текста.</span>
+        </div>
+
+        <div class="field">
+            <label for="body">Полный текст *</label>
+            <textarea id="body" th:field="*{body}" rows="16" required></textarea>
+            <div class="err" th:if="${#fields.hasErrors('body')}" th:errors="*{body}"></div>
+            <span class="hint">Обычный текст, без HTML. Переносы строк сохраняются.</span>
+        </div>
+
+        <div class="toolbar">
+            <button class="btn btn-primary" type="submit">Сохранить</button>
+            <a class="btn" th:href="@{/admin/poems}">Отмена</a>
+        </div>
+    </form>
+
+</div>
+</html>

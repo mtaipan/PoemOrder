@@ -1,0 +1,40 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layouts/public :: layout(~{::content})">
+
+<div th:fragment="content" class="stack">
+
+    <h1>Контакты</h1>
+    <p class="muted">Напиши любым способом — отвечу и уточню детали.</p>
+
+    <div class="grid">
+        <div class="card" th:if="${contactLinks == null or #lists.isEmpty(contactLinks)}">
+            <p style="margin:0;">Контакты пока не настроены.</p>
+            <p class="small muted" style="margin:8px 0 0;">
+                Админка → Контакты → добавь карточки.
+            </p>
+        </div>
+
+        <article class="card" th:each="c : ${contactLinks}">
+            <p class="muted" style="margin:0 0 .4rem 0;">
+                <strong th:text="${c.label}">Название</strong>
+            </p>
+
+            <p style="margin:0;">
+                <a th:if="${c.href != null and !#strings.isEmpty(c.href)}"
+                   th:href="${c.href}"
+                   th:text="${c.value}"
+                   target="_blank" rel="noopener">
+                    Значение
+                </a>
+
+                <span th:unless="${c.href != null and !#strings.isEmpty(c.href)}"
+                      th:text="${c.value}">
+                    Значение
+                </span>
+            </p>
+        </article>
+    </div>
+
+</div>
+</html>

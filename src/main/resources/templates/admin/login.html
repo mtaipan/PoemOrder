@@ -1,0 +1,45 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <title>Вход · PoemOrder</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+<div class="login-page">
+    <div class="login stack">
+        <a class="brand" th:href="@{/}" style="justify-content:center">
+            <span class="dot">P</span><span>PoemOrder</span>
+        </a>
+
+        <div class="card stack">
+            <div>
+                <h1>Вход в админку</h1>
+                <p class="small">Доступ только для администратора.</p>
+            </div>
+
+            <div th:if="${param.error}" class="alert err">Неверный логин или пароль.</div>
+            <div th:if="${param.logout}" class="alert ok">Вы вышли из админки.</div>
+
+            <form method="post" th:action="@{/admin/login}" class="stack">
+                <div class="field">
+                    <label for="username">Логин</label>
+                    <input id="username" name="username" autocomplete="username" autofocus required>
+                </div>
+                <div class="field">
+                    <label for="password">Пароль</label>
+                    <input id="password" name="password" type="password" autocomplete="current-password" required>
+                </div>
+                <button class="btn btn-primary" type="submit">Войти</button>
+            </form>
+        </div>
+
+        <p class="small" style="text-align:center;margin:0">
+            <a th:href="@{/}">← Вернуться на сайт</a>
+        </p>
+    </div>
+</div>
+</body>
+</html>

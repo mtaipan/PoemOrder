@@ -1,0 +1,24 @@
+<header xmlns:th="http://www.thymeleaf.org" th:fragment="header" class="site-header">
+    <div class="wrap">
+        <nav class="nav">
+            <a class="brand" th:href="@{/}">
+                <strong th:text="${siteName ?: 'Стихи на заказ'}">Стихи на заказ</strong>
+                <span class="small" th:text="${authorName ?: 'Автор'}">Алексей Боков</span>
+            </a>
+
+            <span class="spacer" aria-hidden="true"></span>
+
+            <a th:href="@{/}" th:classappend="${activePage}=='home' ? ' is-active' : ''">Главная</a>
+            <a th:href="@{/portfolio}" th:classappend="${activePage}=='portfolio' ? ' is-active' : ''">Портфолио</a>
+            <a th:href="@{/reviews}" th:classappend="${activePage}=='reviews' ? ' is-active' : ''">Отзывы</a>
+
+            <a th:href="@{/pricing}" th:classappend="${activePage}=='pricing' ? ' is-active' : ''">Цены</a>
+
+            <a th:href="@{/contacts}" th:classappend="${activePage}=='contacts' ? ' is-active' : ''">Контакты</a>
+
+            <a class="nav-cta"
+               th:href="@{/order}"
+               th:classappend="${activePage}=='order' ? ' is-active' : ''">Заказать</a>
+        </nav>
+    </div>
+</header>

@@ -1,0 +1,167 @@
+/* PoemOrder admin — lightweight modern UI. No webfonts, no CDN, no JS deps.
+   System font stack + CSS vars + light/dark. Gzips to a few KB (well under 14KB). */
+
+:root{
+  --bg:#f6f7f9; --surface:#fff; --surface-2:#f1f3f6;
+  --text:#1a1d23; --muted:#6b7280; --border:#e3e6ea;
+  --accent:#5b5bd6; --accent-weak:#ecebfb; --accent-press:#4a4ac4;
+  --danger:#c4314b; --danger-weak:#fbeaed; --ok:#1f9d6b; --ok-weak:#e7f6ef;
+  --warn:#9a6b00; --warn-weak:#fcf3df;
+  --radius:10px; --radius-sm:7px;
+  --shadow:0 1px 2px rgba(16,24,40,.05),0 1px 3px rgba(16,24,40,.07);
+  --ring:0 0 0 3px var(--accent-weak);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#0f1115; --surface:#181b21; --surface-2:#1f232b;
+    --text:#e7e9ee; --muted:#9aa3b2; --border:#2a2f39;
+    --accent:#8d8bf2; --accent-weak:#23253a; --accent-press:#a3a1f6;
+    --danger:#f0738c; --danger-weak:#33212a; --ok:#46c08a; --ok-weak:#16291f;
+    --warn:#e0b15a; --warn-weak:#2c2410;
+    --shadow:0 1px 2px rgba(0,0,0,.4);
+  }
+}
+
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,"Helvetica Neue",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+h1,h2,h3{line-height:1.2;margin:0}
+p{margin:0}
+
+/* ---------- top bar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:20;background:var(--surface);
+  border-bottom:1px solid var(--border);
+}
+.topbar .bar{
+  max-width:1040px;margin:0 auto;padding:10px 16px;
+  display:flex;align-items:center;gap:14px;
+}
+.brand{display:flex;align-items:center;gap:9px;font-weight:700;color:var(--text);white-space:nowrap}
+.brand:hover{text-decoration:none}
+.brand .dot{width:22px;height:22px;border-radius:6px;background:var(--accent);
+  display:grid;place-items:center;color:#fff;font-size:13px;font-weight:800}
+.nav{display:flex;align-items:center;gap:4px;flex:1;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav a{
+  color:var(--muted);padding:7px 11px;border-radius:8px;font-weight:500;
+  white-space:nowrap;transition:background .12s,color .12s;
+}
+.nav a:hover{background:var(--surface-2);color:var(--text);text-decoration:none}
+.nav a.active{background:var(--accent-weak);color:var(--accent);font-weight:600}
+.topbar .right{display:flex;align-items:center;gap:8px}
+
+/* ---------- layout ---------- */
+.wrap{max-width:1040px;margin:0 auto;padding:24px 16px 60px}
+.stack{display:flex;flex-direction:column;gap:16px}
+.page-head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:4px}
+.page-head h1{font-size:24px;font-weight:700;letter-spacing:-.01em}
+.subtitle{color:var(--muted);font-size:14px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.muted{color:var(--muted)}
+.small{font-size:13px;color:var(--muted)}
+
+/* ---------- cards ---------- */
+.card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;
+}
+.cards{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+.tile{display:block;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:18px;color:var(--text)}
+.tile:hover{text-decoration:none;border-color:var(--accent);transform:translateY(-1px);transition:.12s}
+.tile .t{font-weight:600;margin-bottom:3px}
+.tile .d{color:var(--muted);font-size:13px}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;gap:7px;justify-content:center;
+  font:inherit;font-weight:600;cursor:pointer;
+  padding:9px 15px;border-radius:9px;border:1px solid var(--border);
+  background:var(--surface);color:var(--text);transition:background .12s,border-color .12s,opacity .12s;
+}
+.btn:hover{background:var(--surface-2);text-decoration:none}
+.btn:focus-visible{outline:none;box-shadow:var(--ring)}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent-press);border-color:var(--accent-press)}
+.btn-danger{background:transparent;border-color:var(--border);color:var(--danger)}
+.btn-danger:hover{background:var(--danger-weak);border-color:var(--danger)}
+.btn-sm{padding:6px 11px;font-size:13px;border-radius:8px}
+.btn-link{background:none;border:none;color:var(--accent);padding:6px 4px;cursor:pointer;font:inherit;font-weight:600}
+.btn-link:hover{text-decoration:underline}
+.btn-link.danger{color:var(--danger)}
+
+/* ---------- tables ---------- */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);box-shadow:var(--shadow)}
+table.tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:520px}
+.tbl th{
+  text-align:left;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.03em;
+  padding:11px 14px;border-bottom:1px solid var(--border);background:var(--surface-2);white-space:nowrap;
+}
+.tbl td{padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tbody tr:hover{background:var(--surface-2)}
+.tbl .num{color:var(--muted);font-variant-numeric:tabular-nums}
+.tbl .right{text-align:right;white-space:nowrap}
+
+/* ---------- badges ---------- */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;
+  font-size:12px;font-weight:600;line-height:1.4;white-space:nowrap;
+  background:var(--surface-2);color:var(--muted)}
+.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.9}
+.b-new,.b-pending{background:var(--accent-weak);color:var(--accent)}
+.b-in_progress{background:var(--warn-weak);color:var(--warn)}
+.b-done,.b-approved,.b-published{background:var(--ok-weak);color:var(--ok)}
+.b-canceled{background:var(--danger-weak);color:var(--danger)}
+.b-draft{background:var(--surface-2);color:var(--muted)}
+
+/* ---------- forms ---------- */
+.field{display:flex;flex-direction:column;gap:6px}
+.field>label,.lbl{font-size:13px;font-weight:600;color:var(--text)}
+.field .hint{font-size:12.5px;color:var(--muted)}
+input,textarea,select{
+  width:100%;font:inherit;color:var(--text);background:var(--surface);
+  padding:10px 12px;border:1px solid var(--border);border-radius:9px;transition:border-color .12s,box-shadow .12s;
+}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:var(--ring)}
+textarea{resize:vertical;min-height:90px}
+input[type=checkbox]{width:auto}
+.check{display:inline-flex;align-items:center;gap:9px;font-size:14px;font-weight:500;cursor:pointer}
+.err{color:var(--danger);font-size:13px}
+.grid2{display:grid;gap:14px;grid-template-columns:1fr 1fr}
+.row-end{display:grid;gap:12px;align-items:end}
+
+/* ---------- alerts ---------- */
+.alert{display:flex;gap:9px;align-items:center;padding:11px 14px;border-radius:9px;font-size:14px;
+  border:1px solid var(--border);background:var(--surface)}
+.alert.ok{background:var(--ok-weak);border-color:transparent;color:var(--ok)}
+.alert.err{background:var(--danger-weak);border-color:transparent;color:var(--danger)}
+
+/* ---------- misc ---------- */
+.empty{text-align:center;padding:42px 18px;color:var(--muted);
+  border:1px dashed var(--border);border-radius:var(--radius);background:var(--surface)}
+.empty .big{font-size:15px;color:var(--text);font-weight:600;margin-bottom:4px}
+.pager{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px;font-size:14px;color:var(--muted)}
+.dl{display:grid;grid-template-columns:max-content 1fr;gap:8px 18px;font-size:15px}
+.dl dt{color:var(--muted)}
+.dl dd{margin:0}
+.pre{white-space:pre-wrap;word-break:break-word;background:var(--surface-2);border:1px solid var(--border);
+  border-radius:9px;padding:12px 14px;font:inherit;margin:0}
+.sep{height:1px;background:var(--border);border:0;margin:4px 0}
+
+/* ---------- login ---------- */
+.login-page{min-height:100dvh;display:grid;place-items:center;padding:20px}
+.login{width:100%;max-width:360px}
+.login .card{padding:24px}
+.login h1{font-size:20px;margin-bottom:4px}
+
+@media (max-width:560px){
+  .grid2{grid-template-columns:1fr}
+  .page-head h1{font-size:21px}
+}

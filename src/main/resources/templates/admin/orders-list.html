@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/admin :: layout(~{::content}, 'orders')}">
+
+<div th:fragment="content" class="stack">
+
+    <div class="page-head">
+        <div>
+            <h1>Заказы</h1>
+            <p class="subtitle">Заявки, оставленные через форму на сайте.</p>
+        </div>
+    </div>
+
+    <div th:if="${orders == null || orders.empty}" class="empty">
+        <div class="big">Пока нет заказов</div>
+        <div>Новые заявки появятся здесь автоматически.</div>
+    </div>
+
+    <div th:if="${orders != null && !orders.empty}" class="tbl-wrap">
+        <table class="tbl">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Дата</th>
+                <th>Имя</th>
+                <th>Телефон</th>
+                <th>Соцсеть</th>
+                <th>Статус</th>
+                <th class="right"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="o : ${orders}">
+                <td class="num" th:text="${o.id}">1</td>
+                <td class="num" th:text="${#temporals.format(o.createdAt, 'dd.MM.yy HH:mm')}">—</td>
+                <td th:text="${o.name}">—</td>
+                <td th:text="${o.phone}">—</td>
+                <td class="muted" th:text="${o.social != null ? o.social : '—'}">—</td>
+                <td>
+                    <span class="badge" th:classappend="${'b-' + #strings.toLowerCase(o.status)}"
+                          th:text="${o.status}">NEW</span>
+                </td>
+                <td class="right">
+                    <a class="btn btn-sm" th:href="@{'/admin/orders/' + ${o.id}}">Открыть</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <nav th:replace="~{fragments/pager :: pager(${orders}, '/admin/orders')}"></nav>
+</div>
+</html>

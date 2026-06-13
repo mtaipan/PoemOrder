@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layouts/public :: layout(~{::content})">
+<body>
+<section th:fragment="content" class="wrap stack">
+    <h1>Доступ ограничен</h1>
+
+    <p class="lead">
+        У тебя нет прав для просмотра этой страницы.
+    </p>
+
+    <div class="actions">
+        <a th:href="@{/admin/login}" class="btn">Войти</a>
+        <a th:href="@{/}">На главную</a>
+    </div>
+</section>
+</body>
+</html>

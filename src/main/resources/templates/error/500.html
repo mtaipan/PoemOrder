@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layouts/public :: layout(~{::content})">
+<body>
+<section th:fragment="content" class="wrap stack">
+    <h1>Что-то пошло не так</h1>
+
+    <p class="lead">
+        Мы уже видим проблему. Попробуй обновить страницу чуть позже.
+    </p>
+
+    <div class="actions">
+        <a th:href="@{/}" class="btn">На главную</a>
+    </div>
+
+    <p class="small muted">
+        Если ошибка повторяется — напиши администратору сайта.
+    </p>
+</section>
+</body>
+</html>

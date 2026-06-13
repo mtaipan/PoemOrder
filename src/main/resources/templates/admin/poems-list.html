@@ -1,0 +1,55 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru"
+      th:replace="~{layouts/admin :: layout(~{::content}, 'poems')}">
+
+<div th:fragment="content" class="stack">
+
+    <div class="page-head">
+        <div>
+            <h1>Стихи</h1>
+            <p class="subtitle">Опубликованные работы видны в портфолио на сайте.</p>
+        </div>
+        <div class="toolbar">
+            <a class="btn btn-primary" th:href="@{/admin/poems/new}">+ Добавить стих</a>
+        </div>
+    </div>
+
+    <div th:if="${poems == null || poems.empty}" class="empty">
+        <div class="big">Пока нет стихов</div>
+        <div>Добавьте первую работу — она появится в портфолио после публикации.</div>
+    </div>
+
+    <div th:if="${poems != null && !poems.empty}" class="tbl-wrap">
+        <table class="tbl">
+            <thead>
+            <tr>
+                <th>Название</th>
+                <th>Статус</th>
+                <th>Обновлён</th>
+                <th class="right"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="p : ${poems}">
+                <td><strong th:text="${p.title}">Название</strong></td>
+                <td>
+                    <span class="badge" th:classappend="${'b-' + #strings.toLowerCase(p.status)}"
+                          th:text="${p.status.label}">Опубликовано</span>
+                </td>
+                <td class="num" th:text="${#temporals.format(p.updatedAt, 'dd.MM.yy HH:mm')}">—</td>
+                <td class="right">
+                    <a class="btn btn-sm" th:href="@{|/admin/poems/${p.id}/edit|}">Изменить</a>
+                    <form th:action="@{|/admin/poems/${p.id}/delete|}" method="post"
+                          style="display:inline" onsubmit="return confirm('Удалить стих «' + this.dataset.t + '»?')"
+                          th:attr="data-t=${p.title}">
+                        <button class="btn-link danger" type="submit">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <nav th:replace="~{fragments/pager :: pager(${poems}, '/admin/poems')}"></nav>
+</div>
+</html>

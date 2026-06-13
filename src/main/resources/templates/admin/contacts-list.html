@@ -1,0 +1,100 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru"
+      th:replace="~{layouts/admin :: layout(~{::content}, 'contacts')}">
+
+<div th:fragment="content" class="stack">
+
+    <div class="page-head">
+        <div>
+            <h1>Контакты</h1>
+            <p class="subtitle">Карточки на странице «Контакты». Пустая ссылка — просто текст.</p>
+        </div>
+    </div>
+
+    <div th:if="${param.ok}" class="alert ok">Сохранено.</div>
+    <div th:if="${param.deleted}" class="alert ok">Удалено.</div>
+    <div th:if="${param.error}" class="alert err">
+        Ссылка должна начинаться с http://, https://, mailto: или tel:
+    </div>
+
+    <!-- ===== Добавить новую ===== -->
+    <div class="card stack">
+        <h2 style="font-size:15px;margin:0">Добавить карточку</h2>
+        <form th:action="@{/admin/contacts/save}" method="post" class="stack">
+            <div class="grid2">
+                <div class="field">
+                    <label>Название</label>
+                    <input name="label" placeholder="Например: Telegram" maxlength="120" required/>
+                </div>
+                <div class="field">
+                    <label>Значение</label>
+                    <input name="value" placeholder="Например: @alexey" maxlength="300" required/>
+                </div>
+            </div>
+            <div class="field">
+                <label>Ссылка (необязательно)</label>
+                <input name="href" placeholder="https://t.me/… · tel:+7… · mailto:…" maxlength="500"/>
+            </div>
+            <div class="toolbar" style="align-items:center">
+                <div class="field" style="width:110px">
+                    <label>Порядок</label>
+                    <input name="sortOrder" type="number" value="0"/>
+                </div>
+                <label class="check" style="padding-top:18px">
+                    <input type="checkbox" name="enabled" value="true" checked/> Показывать на сайте
+                </label>
+                <button class="btn btn-primary" type="submit" style="margin-top:18px">Добавить</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- ===== Существующие ===== -->
+    <div th:if="${items == null || #lists.isEmpty(items)}" class="empty">
+        <div class="big">Карточек пока нет</div>
+        <div>Добавьте первую через форму выше.</div>
+    </div>
+
+    <div class="card stack" th:each="c : ${items}">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+            <strong th:text="${c.label}">Название</strong>
+            <span class="badge" th:classappend="${c.enabled ? 'b-published' : 'b-draft'}"
+                  th:text="${c.enabled ? 'на сайте' : 'скрыта'}">на сайте</span>
+        </div>
+
+        <form th:action="@{/admin/contacts/save}" method="post" class="stack">
+            <input type="hidden" name="id" th:value="${c.id}"/>
+            <div class="grid2">
+                <div class="field">
+                    <label>Название</label>
+                    <input name="label" th:value="${c.label}" maxlength="120" required/>
+                </div>
+                <div class="field">
+                    <label>Значение</label>
+                    <input name="value" th:value="${c.value}" maxlength="300" required/>
+                </div>
+            </div>
+            <div class="field">
+                <label>Ссылка</label>
+                <input name="href" th:value="${c.href}" maxlength="500"
+                       placeholder="https://… · tel:… · mailto:…"/>
+            </div>
+            <div class="toolbar" style="align-items:center">
+                <div class="field" style="width:110px">
+                    <label>Порядок</label>
+                    <input name="sortOrder" type="number" th:value="${c.sortOrder}"/>
+                </div>
+                <label class="check" style="padding-top:18px">
+                    <input type="checkbox" name="enabled" value="true" th:checked="${c.enabled}"/> Показывать на сайте
+                </label>
+                <button class="btn btn-primary btn-sm" type="submit" style="margin-top:18px">Сохранить</button>
+            </div>
+        </form>
+
+        <form th:action="@{|/admin/contacts/${c.id}/delete|}" method="post" style="margin:0"
+              onsubmit="return confirm('Удалить карточку?')">
+            <button class="btn-link danger" type="submit">Удалить</button>
+        </form>
+    </div>
+
+</div>
+</html>
