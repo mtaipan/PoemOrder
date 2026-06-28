@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "poemorder",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "cd /Users/a123456/Downloads/PoemOrder-main && SERVER_PORT=8090 APP_ADMINS=admin:admin THYMELEAF_CACHE=false sh ./mvnw -o spring-boot:run"],
+      "port": 8090
+    }
+  ]
+}
