@@ -36,7 +36,7 @@ public class OrderService {
     public Order createFromForm(OrderForm form) {
         Order o = new Order();
         o.setName(form.getName().trim());
-        o.setPhone(form.getPhone().trim());
+        o.setPhone(form.getPhone() == null ? "" : form.getPhone().trim());
         o.setSocial(form.getSocial() == null ? null : form.getSocial().trim());
         o.setDescription(form.getDescription().trim());
         o.setStatus(OrderStatus.NEW);

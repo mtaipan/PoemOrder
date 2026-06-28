@@ -31,16 +31,16 @@
             </thead>
             <tbody>
             <tr th:each="o : ${orders}">
-                <td class="num" th:text="${o.id}">1</td>
-                <td class="num" th:text="${#temporals.format(o.createdAt, 'dd.MM.yy HH:mm')}">—</td>
-                <td th:text="${o.name}">—</td>
-                <td th:text="${o.phone}">—</td>
-                <td class="muted" th:text="${o.social != null ? o.social : '—'}">—</td>
-                <td>
+                <td class="num" data-label="#" th:text="${o.id}">1</td>
+                <td class="num" data-label="Дата" th:text="${#temporals.format(o.createdAt, 'dd.MM.yy HH:mm')}">—</td>
+                <td data-label="Имя" th:text="${o.name}">—</td>
+                <td data-label="Телефон" th:text="${o.phone}">—</td>
+                <td class="muted" data-label="Соцсеть" th:text="${o.social != null ? o.social : '—'}">—</td>
+                <td data-label="Статус">
                     <span class="badge" th:classappend="${'b-' + #strings.toLowerCase(o.status)}"
                           th:text="${o.status}">NEW</span>
                 </td>
-                <td class="right">
+                <td class="cell-actions">
                     <a class="btn btn-sm" th:href="@{'/admin/orders/' + ${o.id}}">Открыть</a>
                 </td>
             </tr>

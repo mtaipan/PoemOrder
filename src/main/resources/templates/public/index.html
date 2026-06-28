@@ -5,128 +5,169 @@
 
 <main th:fragment="content">
 
-    <!-- HERO -->
-    <section class="hero">
+    <!-- HERO (dark focal band) -->
+    <section class="hero bleed">
         <div class="hero-inner">
             <div>
-                <h1 th:text="${settings.heroTitle ?: 'Стихи на заказ'}"></h1>
-
+                <p class="eyebrow">свадьбы · юбилеи · признания</p>
+                <h1 th:utext="${settings.heroTitle ?: 'Слова, которые трудно<br>сказать <span class=&quot;accent&quot;>самому</span>'}"></h1>
                 <p class="lead"
-                   th:text="${settings.heroSubtitle ?: 'Пишу авторские стихи: поздравления, признания, свадьбы, юбилеи. По твоей истории и под нужный стиль.'}">
-                </p>
+                   th:text="${settings.heroSubtitle ?: 'Авторские стихи по вашей истории. Каждый текст — из разговора, а не из шаблона.'}"></p>
 
-                <p style="margin-top:14px;">
-                    <a class="btn" th:href="@{/order}">Заказать стих</a>
-                </p>
+                <div class="cta-row">
+                    <a th:if="${telegramUrl != null}" class="btn btn-tg"
+                       th:href="${telegramUrl}" target="_blank" rel="noopener">
+                        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71l-4.14-3.05-1.99 1.93c-.23.23-.42.42-.83.42z"/>
+                        </svg>
+                        Написать в Telegram
+                    </a>
+                    <a class="btn"
+                       th:classappend="${telegramUrl != null} ? ' btn-ghost-light' : ''"
+                       th:href="@{/order}">Оставить заявку</a>
+                </div>
             </div>
 
-            <aside class="how">
-                <h3>Как это работает</h3>
-                <ol class="steps">
-                    <li>Рассказываешь историю и пожелания</li>
-                    <li>Я превращаю это в стих и уточняю детали</li>
-                    <li>Ты получаешь готовый текст</li>
-                </ol>
-                <a th:href="@{/portfolio}">Посмотреть примеры →</a>
-            </aside>
+            <div class="hero-photo">
+                <div class="frame"><span>АБ</span></div>
+                <div class="cap">Пишу с 2012 года</div>
+            </div>
         </div>
 
-        <svg class="tear" viewBox="0 0 1440 120" preserveAspectRatio="none">
-            <path d="M0,40 C120,80 240,0 360,40 C480,80 600,0 720,40 C840,80 960,0 1080,40 C1200,80 1320,0 1440,40 L1440,120 L0,120 Z"></path>
-        </svg>
-    </section>
-
-    <!-- PRICING TEASER -->
-    <section class="stack" style="margin-top:18px;">
-        <h2>Цены и условия</h2>
-
-        <div class="card">
-            <p class="muted">
-                <strong>Оплата:</strong>
-                <span th:text="${#strings.abbreviate(settings.pricingPayment, 140)}"></span>
-            </p>
-            <p class="muted">
-                <strong>Доставка:</strong>
-                <span th:text="${#strings.abbreviate(settings.pricingDelivery, 140)}"></span>
-            </p>
-            <p class="muted">
-                <strong>Возврат:</strong>
-                <span th:text="${#strings.abbreviate(settings.pricingRefund, 140)}"></span>
-            </p>
-
-            <p style="margin-top:12px;">
-                <a th:href="@{/pricing}">Подробнее →</a>
-            </p>
+        <div class="hero-stats">
+            <div class="stat"><div class="num">200+</div><div class="lbl">готовых стихов</div></div>
+            <div class="stat"><div class="num">12 лет</div><div class="lbl">пишу на заказ</div></div>
+            <div class="stat"><div class="num">~2 часа</div><div class="lbl">отвечаю лично</div></div>
         </div>
     </section>
 
-    <hr class="hr"/>
+    <!-- OCCASIONS -->
+    <section class="stack" style="margin-top:44px;">
+        <p class="eyebrow" style="text-align:center; margin-bottom:0;">по любому поводу</p>
+        <div class="occasions">
+            <a class="occasion" th:href="@{/order}">
+                <span class="occ-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8.5" cy="14" r="5.2"/><circle cx="15.5" cy="14" r="5.2"/></svg></span>
+                <span class="lbl">Свадьба</span>
+            </a>
+            <a class="occasion" th:href="@{/order}">
+                <span class="occ-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M5 21h14v-8H5z"/><path d="M5 13c1.4 1.3 3.1 1.3 4.5 0 1.4 1.3 3.1 1.3 4.5 0 1.4 1.3 3.1 1.3 4.5 0"/><path d="M12 4v5"/></svg></span>
+                <span class="lbl">Юбилей</span>
+            </a>
+            <a class="occasion" th:href="@{/order}">
+                <span class="occ-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 20s-7-4.6-7-9.6A3.5 3.5 0 0 1 12 8a3.5 3.5 0 0 1 7 2.4C19 15.4 12 20 12 20z"/></svg></span>
+                <span class="lbl">Признание</span>
+            </a>
+            <a class="occasion" th:href="@{/order}">
+                <span class="occ-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="1"/><path d="M12 10v10M3 10h18"/><path d="M12 10C12 7.2 9.4 6.2 8.3 8s1.2 2 3.7 2zM12 10c0-2.8 2.6-3.8 3.7-2s-1.2 2-3.7 2z"/></svg></span>
+                <span class="lbl">Праздник</span>
+            </a>
+        </div>
+    </section>
 
-    <!-- PORTFOLIO PREVIEW -->
-    <section class="stack">
-        <h2>Портфолио</h2>
+    <div class="ornament">✦ ✦ ✦</div>
 
-        <div class="grid">
-            <article class="card" th:each="w : ${featuredWorks}">
-                <p class="muted">
-                    <strong th:text="${w.title}"></strong>
-                    <span class="muted"> · Стих</span>
-                </p>
+    <!-- EXAMPLES -->
+    <section class="stack" style="margin-top:14px;">
+        <div class="section-head">
+            <h2>Примеры работ</h2>
+            <a th:href="@{/portfolio}">Все работы →</a>
+        </div>
 
-                <p th:text="${w.excerpt ?: #strings.abbreviate(w.body, 220)}"></p>
+        <div class="featured-poem" th:if="${featuredWorks != null and !featuredWorks.isEmpty()}">
+            <div class="who" th:text="${featuredWorks[0].title}"></div>
+            <p th:text="${featuredWorks[0].excerpt ?: #strings.abbreviate(featuredWorks[0].body, 240)}"></p>
+        </div>
+        <div class="featured-poem" th:unless="${featuredWorks != null and !featuredWorks.isEmpty()}">
+            <div class="who">к серебряной свадьбе</div>
+            <p>Я не дарю тебе ни звёзд, ни далей —
+дарю слова, что ждали много лет…</p>
+        </div>
+
+        <div class="grid" th:if="${featuredWorks != null and featuredWorks.size() > 1}">
+            <article class="card portfolio-card" th:each="w,it : ${featuredWorks}" th:if="${it.index > 0}">
+                <p class="eyebrow" style="margin-bottom:8px;" th:text="${w.title}"></p>
+                <p th:text="${w.excerpt ?: #strings.abbreviate(w.body, 200)}"></p>
             </article>
         </div>
-
-        <p><a th:href="@{/portfolio}">Все работы</a></p>
     </section>
 
-    <hr class="hr"/>
-
-    <!-- REVIEWS PREVIEW -->
-    <section class="stack">
-        <h2>Отзывы</h2>
-
-        <div class="grid">
-            <article class="card" th:each="r : ${featuredReviews}">
-                <p class="muted">
-                    <strong th:text="${r.name}"></strong>
-                </p>
-                <p th:text="${r.text}"></p>
-            </article>
+    <!-- STEPS (cream band) -->
+    <section class="steps-band bleed" style="margin-top:40px;">
+        <div class="inner">
+            <h2 class="section-title-center">Как это работает</h2>
+            <div class="steps-row">
+                <div class="step"><div class="circle">1</div><div class="t">Рассказываете историю и пожелания</div></div>
+                <div class="step"><div class="circle">2</div><div class="t">Пишу стих и уточняю детали</div></div>
+                <div class="step"><div class="circle">3</div><div class="t">Получаете готовый текст</div></div>
+            </div>
         </div>
-
-        <p><a th:href="@{/reviews}">Все отзывы</a></p>
     </section>
 
-    <hr class="hr"/>
+    <!-- TESTIMONIAL -->
+    <section class="quote" th:if="${featuredReviews != null and !featuredReviews.isEmpty()}">
+        <span class="mark">&ldquo;</span>
+        <p th:text="${featuredReviews[0].text}"></p>
+        <div class="by" th:text="|— ${featuredReviews[0].name}|"></div>
+        <p style="margin-top:14px;"><a th:href="@{/reviews}" style="color:var(--wine); text-decoration:none;">Все отзывы →</a></p>
+    </section>
 
-    <!-- CONTACTS PREVIEW (новая система) -->
-    <section class="stack">
+    <!-- PRICING -->
+    <section class="stack" style="margin-top:8px;">
+        <h2 class="section-title-center">Тарифы</h2>
+        <div class="pricing-cards">
+            <div class="price-card">
+                <div class="tier">Короткий</div>
+                <div class="amt">2 000 ₽</div>
+                <div class="desc">8–12 строк<br>1 правка</div>
+            </div>
+            <div class="price-card featured">
+                <div class="badge">популярный</div>
+                <div class="tier">Душевный</div>
+                <div class="amt">4 500 ₽</div>
+                <div class="desc">16–24 строки<br>3 правки</div>
+            </div>
+            <div class="price-card">
+                <div class="tier">Поэма</div>
+                <div class="amt">от 8 000 ₽</div>
+                <div class="desc">большая форма<br>правки без счёта</div>
+            </div>
+        </div>
+        <p class="small" style="text-align:center; margin-top:14px;">
+            <a th:href="@{/pricing}" style="color:var(--wine); text-decoration:none;">Условия оплаты, сроков и возврата →</a>
+        </p>
+    </section>
+
+    <!-- DARK CTA -->
+    <section class="cta-band bleed" style="margin-top:44px;">
+        <h2>Расскажите свою историю</h2>
+        <p>Отвечаю лично, обычно в течение пары часов.</p>
+        <a th:if="${telegramUrl != null}" class="btn btn-gold"
+           th:href="${telegramUrl}" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71l-4.14-3.05-1.99 1.93c-.23.23-.42.42-.83.42z"/>
+            </svg>
+            Написать в Telegram
+        </a>
+        <a th:unless="${telegramUrl != null}" class="btn btn-gold" th:href="@{/order}">Оставить заявку</a>
+    </section>
+
+    <!-- CONTACTS -->
+    <section class="stack" style="margin-top:44px;">
         <h2>Контакты</h2>
-        <p class="muted">Остались вопросы? Пиши удобным способом.</p>
-
+        <p class="muted">Остались вопросы? Пиши удобным способом — отвечаю лично.</p>
         <div class="grid">
             <div class="card" th:each="c : ${contactLinks}">
-                <p style="margin:0 0 6px;">
-                    <strong th:text="${c.label}">Название</strong>
-                </p>
-
+                <p class="eyebrow" style="margin:0 0 6px;" th:text="${c.label}">Название</p>
                 <p class="small" style="margin:0;">
                     <a th:if="${c.href != null and !#strings.isEmpty(c.href)}"
-                       th:href="${c.href}"
-                       th:text="${c.value}"
-                       target="_blank" rel="noopener"></a>
-
-                    <span th:unless="${c.href != null and !#strings.isEmpty(c.href)}"
-                          th:text="${c.value}"></span>
+                       th:href="${c.href}" th:text="${c.value}" target="_blank" rel="noopener"></a>
+                    <span th:unless="${c.href != null and !#strings.isEmpty(c.href)}" th:text="${c.value}"></span>
                 </p>
             </div>
         </div>
-
-        <p style="margin-top:6px;">
-            <a th:href="@{/contacts}">Страница контактов</a>
-        </p>
+        <p style="margin-top:6px;"><a th:href="@{/contacts}">Страница контактов</a></p>
     </section>
 
 </main>
 </html>
+</content>

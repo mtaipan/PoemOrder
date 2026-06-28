@@ -35,15 +35,15 @@
                 <label>Ссылка (необязательно)</label>
                 <input name="href" placeholder="https://t.me/… · tel:+7… · mailto:…" maxlength="500"/>
             </div>
-            <div class="toolbar" style="align-items:center">
+            <div class="toolbar" style="align-items:end">
                 <div class="field" style="width:110px">
                     <label>Порядок</label>
                     <input name="sortOrder" type="number" value="0"/>
                 </div>
-                <label class="check" style="padding-top:18px">
+                <label class="check" style="min-height:42px">
                     <input type="checkbox" name="enabled" value="true" checked/> Показывать на сайте
                 </label>
-                <button class="btn btn-primary" type="submit" style="margin-top:18px">Добавить</button>
+                <button class="btn btn-primary" type="submit">Добавить</button>
             </div>
         </form>
     </div>
@@ -78,15 +78,15 @@
                 <input name="href" th:value="${c.href}" maxlength="500"
                        placeholder="https://… · tel:… · mailto:…"/>
             </div>
-            <div class="toolbar" style="align-items:center">
+            <div class="toolbar" style="align-items:end">
                 <div class="field" style="width:110px">
                     <label>Порядок</label>
                     <input name="sortOrder" type="number" th:value="${c.sortOrder}"/>
                 </div>
-                <label class="check" style="padding-top:18px">
+                <label class="check" style="min-height:42px">
                     <input type="checkbox" name="enabled" value="true" th:checked="${c.enabled}"/> Показывать на сайте
                 </label>
-                <button class="btn btn-primary btn-sm" type="submit" style="margin-top:18px">Сохранить</button>
+                <button class="btn btn-primary" type="submit">Сохранить</button>
             </div>
         </form>
 

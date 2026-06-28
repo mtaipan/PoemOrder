@@ -38,7 +38,7 @@
         <h2 style="font-size:15px;margin:0">Изменить статус</h2>
         <form th:action="@{'/admin/orders/' + ${order.id} + '/status'}" method="post"
               class="toolbar" style="align-items:end">
-            <div class="field" style="min-width:220px">
+            <div class="field" style="flex:1;min-width:180px">
                 <label for="status">Статус</label>
                 <select id="status" name="status">
                     <option th:each="s : ${statuses}"

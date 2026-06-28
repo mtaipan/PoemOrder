@@ -1,5 +1,6 @@
 package com.poemorder.app.dto;
 
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -9,7 +10,6 @@ public class OrderForm {
     @Size(max = 80)
     private String name;
 
-    @NotBlank
     @Size(max = 30)
     private String phone;
 
@@ -37,4 +37,15 @@ public class OrderForm {
 
     public String getWebsite() { return website; }
     public void setWebsite(String website) { this.website = website; }
+
+    /**
+     * Хотя бы один способ связи обязателен: телефон ИЛИ контакт в мессенджере.
+     * Ошибка привязывается к виртуальному полю «contactProvided»
+     * (см. fieldErrors('contactProvided') в форме).
+     */
+    @AssertTrue(message = "Укажите телефон или контакт в мессенджере (Telegram/VK)")
+    public boolean isContactProvided() {
+        return (phone != null && !phone.isBlank())
+                || (social != null && !social.isBlank());
+    }
 }

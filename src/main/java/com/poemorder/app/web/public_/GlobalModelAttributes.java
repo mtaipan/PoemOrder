@@ -39,6 +39,21 @@ public class GlobalModelAttributes {
         return contactLinkService.publicList();
     }
 
+    /**
+     * Готовая ссылка вида https://t.me/username для кнопок «Написать в Telegram».
+     * Берётся из настроек (settings.telegram), которое может быть «@user», «user»
+     * или уже полным URL. Если не задано — возвращает null (кнопку прячем).
+     */
+    @ModelAttribute("telegramUrl")
+    public String telegramUrl(@ModelAttribute("settings") SiteSettings s) {
+        String tg = s.getTelegram();
+        if (tg == null || tg.isBlank()) return null;
+        tg = tg.trim();
+        if (tg.startsWith("http://") || tg.startsWith("https://")) return tg;
+        if (tg.startsWith("@")) tg = tg.substring(1);
+        return "https://t.me/" + tg;
+    }
+
     // совместимость со старым layout (если где-то ещё используется)
     @ModelAttribute("siteName")
     public String siteName(@ModelAttribute("settings") SiteSettings s) {

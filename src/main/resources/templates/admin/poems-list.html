@@ -31,18 +31,18 @@
             </thead>
             <tbody>
             <tr th:each="p : ${poems}">
-                <td><strong th:text="${p.title}">Название</strong></td>
-                <td>
+                <td data-label="Название"><strong th:text="${p.title}">Название</strong></td>
+                <td data-label="Статус">
                     <span class="badge" th:classappend="${'b-' + #strings.toLowerCase(p.status)}"
                           th:text="${p.status.label}">Опубликовано</span>
                 </td>
-                <td class="num" th:text="${#temporals.format(p.updatedAt, 'dd.MM.yy HH:mm')}">—</td>
-                <td class="right">
+                <td class="num" data-label="Обновлён" th:text="${#temporals.format(p.updatedAt, 'dd.MM.yy HH:mm')}">—</td>
+                <td class="cell-actions">
                     <a class="btn btn-sm" th:href="@{|/admin/poems/${p.id}/edit|}">Изменить</a>
                     <form th:action="@{|/admin/poems/${p.id}/delete|}" method="post"
-                          style="display:inline" onsubmit="return confirm('Удалить стих «' + this.dataset.t + '»?')"
+                          style="display:flex" onsubmit="return confirm('Удалить стих «' + this.dataset.t + '»?')"
                           th:attr="data-t=${p.title}">
-                        <button class="btn-link danger" type="submit">Удалить</button>
+                        <button class="btn btn-sm btn-danger" type="submit">Удалить</button>
                     </form>
                 </td>
             </tr>

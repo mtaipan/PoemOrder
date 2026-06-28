@@ -9,6 +9,23 @@
         Заполни форму — я свяжусь, уточню детали и сроки. Можно писать как удобно, без идеального ТЗ.
     </p>
 
+    <!-- Быстрый путь: написать сразу в Telegram -->
+    <div class="card" th:if="${telegramUrl != null}" style="margin-bottom:18px;">
+        <p style="margin:0 0 10px;">
+            Удобнее обсудить лично? Напиши прямо в Telegram — отвечу и помогу с заказом.
+        </p>
+        <a class="btn btn-tg" th:href="${telegramUrl}" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71l-4.14-3.05-1.99 1.93c-.23.23-.42.42-.83.42z"/>
+            </svg>
+            Написать в Telegram
+        </a>
+    </div>
+
+    <p class="small muted" th:if="${telegramUrl != null}" style="margin:0 0 6px;">
+        …или оставь заявку здесь:
+    </p>
+
     <form class="stack" th:action="@{/order}" th:object="${orderForm}" method="post">
 
         <!-- CSRF -->
@@ -26,16 +43,22 @@
             <div th:replace="~{fragments/form-errors :: fieldErrors('name')}"></div>
         </div>
 
+        <p class="small muted" style="margin:0;">
+            Оставь хотя бы один способ связи — телефон или контакт в мессенджере.
+        </p>
+
         <div class="field">
-            <label for="phone">Телефон</label>
-            <input id="phone" type="tel" th:field="*{phone}" autocomplete="tel" required>
-            <div th:replace="~{fragments/form-errors :: fieldErrors('phone')}"></div>
+            <label for="social">Контакт в мессенджере (Telegram / VK)</label>
+            <input id="social" type="text" th:field="*{social}" autocomplete="off"
+                   placeholder="@username или ссылка">
+            <div th:replace="~{fragments/form-errors :: fieldErrors('social')}"></div>
+            <div th:replace="~{fragments/form-errors :: fieldErrors('contactProvided')}"></div>
         </div>
 
         <div class="field">
-            <label for="social">Контакт (Telegram / VK / другое)</label>
-            <input id="social" type="text" th:field="*{social}" autocomplete="off">
-            <div th:replace="~{fragments/form-errors :: fieldErrors('social')}"></div>
+            <label for="phone">Телефон <span class="muted">— необязательно</span></label>
+            <input id="phone" type="tel" th:field="*{phone}" autocomplete="tel">
+            <div th:replace="~{fragments/form-errors :: fieldErrors('phone')}"></div>
         </div>
 
         <div class="field">
